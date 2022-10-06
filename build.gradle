@@ -1,53 +1,50 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url  = 'https://plugins.gradle.org/m2/' }
-        maven { url='https://dist.creeper.host/Sponge/maven' }
-        maven {
-            url = "https://maven.ellpeck.de"
-        }
-        maven { url 'https://maven.blamejared.com' }
-        maven {
-            // location of the maven that hosts JEI files
-            name = "Progwml6 maven"
-            url = "https://dvs1.progwml6.com/files/maven/"
-        }
-        maven {
-            // location of a maven mirror for JEI files, as a fallback
-            name = "ModMaven"
-            url = "https://modmaven.k-4u.nl"
-        }
+        maven { url 'https://files.minecraftforge.net/maven' }
         jcenter()
         mavenCentral()
+        maven { url 'https://modmaven.dev/' }
+        maven {
+            name "Sponge"
+            url "https://repo.spongepowered.org/repository/maven-public/"
+        }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.5"
-        //classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
+
 }
+
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: "com.wynprice.cursemaven"
-//apply plugin: 'org.spongepowered.mixin'
-version = '1.16.5-1.2.2'
-group = 'com.minttea.minecraft' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'tomeofblood'
+
+
+version = '1.0.0'
+if (System.getenv('BUILD_NUMBER') != null) {
+    version += "." + System.getenv('BUILD_NUMBER')
+}
+archivesBaseName = 'Tome-of-blood-T4'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
+
+
     // The mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   Snapshot are built nightly.
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
+
     mappings channel: 'snapshot', version: '20210309-1.16.5'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
@@ -58,14 +55,13 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
-                tomeoblood {
+                examplemod {
                     source sourceSets.main
                 }
             }
@@ -76,12 +72,14 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config="+"ars_nouveau"+".mixins.json"
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                tomeofblood {
+                examplemod {
                     source sourceSets.main
                 }
             }
@@ -92,98 +90,159 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'tomeofblood', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                tomeofblood {
-                    source sourceSets.main
-                }
-            }
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
     }
 }
 
-// Include resources generated by data generators.
-sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+
+repositories {
+
+    mavenLocal()
+
+    maven {
+        url "https://mvnrepository.com/artifact/net.minecraftforge/forge"
+    }
+
+    maven {
+        url "https://repo.codemc.org/repository/maven-public/"
+    }
+
+    maven {
+        url "http://tehnut.info/maven/"
+    }
+
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        url "https://maven.blamejared.com"
+    }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        name 'LDTTeam - Modding'
+        url 'https://ldtteam.jfrog.io/ldtteam/modding/'
+    }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    jcenter()
+    mavenCentral()
+}
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.62'
 
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
 
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
 
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")
+    compileOnly fg.deobf("curse.maven:exp-238222:3530253") // JEI
+    runtimeOnly fg.deobf("curse.maven:exp-238222:3530253")
 
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.1.0:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.1.0")
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.64')
 
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    compileOnly fg.deobf("com.yourname.modid:BloodMagic:1.16.4-3.1.0-15")
+    runtimeOnly fg.deobf("com.yourname.modid:BloodMagic:1.16.4-3.1.0-15")
 
-    compileOnly fg.deobf("curse.maven:geckolib:3428832")
-    runtimeOnly fg.deobf("curse.maven:geckolib:3428832")
-    compileOnly fg.deobf("curse.maven:curios:3122651")
-    runtimeOnly fg.deobf("curse.maven:curios:3122651")
-    compileOnly fg.deobf("curse.maven:nbtedit:3062106")
-    runtimeOnly fg.deobf("curse.maven:nbtedit:3062106")
-    compileOnly fg.deobf("curse.maven:patchouli:3126931")
-    runtimeOnly fg.deobf("curse.maven:patchouli:3126931")
-    compileOnly fg.deobf("curse.maven:ars-noveau:3468666")
-    runtimeOnly fg.deobf("curse.maven:ars-noveau:3468666")
-    compileOnly fg.deobf("curse.maven:blood-magic:3399440")
-    runtimeOnly fg.deobf("curse.maven:blood-magic:3399440")
-    compileOnly fg.deobf("curse.maven:jei:3280391")
-    runtimeOnly fg.deobf("curse.maven:jei:3280391")
+    compileOnly fg.deobf("io.github.bananapuncher714:nbteditor:7.18.3")
+    runtimeOnly fg.deobf("io.github.bananapuncher714:nbteditor:7.18.3")
 
+
+    compileOnly fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-1.16.5:1.25.7")
+    runtimeOnly fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-1.16.5:1.25.7")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
 
 
 }
+
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-            "Specification-Title": "tomeofblood",
-            "Specification-Vendor": "examplemodsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title": "Tome of Blood T4",
+                "Specification-Vendor": "examplemodsareus",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"examplemodsareus",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "tome.mixins.json"
         ])
     }
 }
 
 // Example configuration to allow publishing using the maven-publish task
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-//publish.dependsOn('reobfJar')
-
+// we define a custom artifact that is sourced from the reobfJar output task
+// and then declare that to be published
+// Note you'll need to add a repository here
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfArtifact = artifacts.add('default', reobfFile) {
+    type 'jar'
+    builtBy 'reobfJar'
+}
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact jar
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            artifact reobfArtifact
+
+            pom.withXml {
+
+                // Go through all the dependencies.
+                asNode().dependencies.dependency.each { dep ->
+
+                    println 'Surpressing artifact ' + dep.artifactId.last().value().last() + ' from maven dependencies.'
+                    assert dep.parent().remove(dep)
+                }
+            }
         }
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+
+// Disables Gradle's custom module metadata from being published to maven. The
+// metadata includes mapped dependencies which are not reasonably consumable by
+// other mod developers.
+tasks.withType(GenerateModuleMetadata) {
+
+    enabled = false
+}
+
+mixin {
+    add sourceSets.main, "tome.refmap.json"
+}
+
+// Prevent Mixin annotation processor from getting into IDEA's annotation processor settings
+// Copied from Botania
+if (System.getProperty("idea.sync.active") == "true") {
+    afterEvaluate {
+        tasks.withType(JavaCompile).all {
+            it.options.annotationProcessorPath = files()
         }
     }
 }

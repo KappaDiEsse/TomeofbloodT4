@@ -10,7 +10,6 @@ import com.hollingsworth.arsnouveau.api.util.SpellRecipeUtil;
 import com.hollingsworth.arsnouveau.common.items.SpellBook;
 import com.hollingsworth.arsnouveau.common.items.SpellParchment;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
-import com.sun.media.jfxmedia.logging.Logger;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -132,6 +131,6 @@ public class BloodScroll extends Item implements IScribeable {
     public List<AbstractSpellPart> getCurrentRecipe(ItemStack stack) {
         if(!stack.hasTag())
             return null;
-        return SpellRecipeUtil.getSpellsFromTagString(stack.getTag().getString("spell"));
+        return SpellRecipeUtil.getSpellsFromString(stack.getTag().getString("spell"));
     }
 }
