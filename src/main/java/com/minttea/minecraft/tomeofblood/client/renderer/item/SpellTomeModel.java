@@ -18,6 +18,8 @@ public class SpellTomeModel extends TransformAnimatedModel<BloodTome> {
     ResourceLocation T1 =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier1.geo.json");
     ResourceLocation T2 =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier2.geo.json");
     ResourceLocation T3 =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier3.geo.json");
+    ResourceLocation T4 =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier4.geo.json");
+    ResourceLocation T4_CLOSED =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier4closed.geo.json");
     ResourceLocation T3_CLOSED =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier3closed.geo.json");
     ResourceLocation T1_CLOSED =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier1closed.geo.json");
     ResourceLocation T2_CLOSED =  new ResourceLocation(ArsNouveau.MODID , "geo/spellbook_tier2closed.geo.json");
@@ -34,14 +36,18 @@ public class SpellTomeModel extends TransformAnimatedModel<BloodTome> {
                 return T1_CLOSED;
             if(book.tier == ISpellTier.Tier.TWO)
                 return T2_CLOSED;
-            return T3_CLOSED;
+            if(book.tier == ISpellTier.Tier.THREE)
+                return T3_CLOSED;
+            return T4_CLOSED;
         }
 
         if(book.tier == ISpellTier.Tier.ONE)
             return T1;
         if(book.tier == ISpellTier.Tier.TWO)
             return T2;
-        return T3;
+        if(book.tier == ISpellTier.Tier.THREE)
+            return T3;
+        return T4;
     }
 
     @Override

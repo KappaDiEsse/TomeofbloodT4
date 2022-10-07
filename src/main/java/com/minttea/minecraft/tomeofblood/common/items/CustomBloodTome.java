@@ -1,10 +1,11 @@
 package com.minttea.minecraft.tomeofblood.common.items;
 
-import com.dkmk100.arsomega.glyphs.ICustomTier;
+import com.dkmk100.arsomega.books.CustomSpellBook;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.spell.SpellContext;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.util.MathUtil;
+import com.hollingsworth.arsnouveau.client.renderer.item.SpellBookRenderer;
 import com.hollingsworth.arsnouveau.common.block.tile.IntangibleAirTile;
 import com.hollingsworth.arsnouveau.common.block.tile.PhantomBlockTile;
 import com.hollingsworth.arsnouveau.common.block.tile.ScribesTile;
@@ -28,11 +29,13 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class BloodTome extends SpellBook {
+public class CustomBloodTome extends CustomSpellBook {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public BloodTome(Tier tier) {
-        super(new Properties().maxStackSize(1).group(ArsNouveau.itemGroup).setISTER(() -> SpellTomeRenderer::new), tier);
+    public CustomBloodTome(String name, int tier, int segments) {
+        super(name, (new Properties()).maxStackSize(1).group(ArsNouveau.itemGroup).setISTER(() -> {
+            return SpellBookRenderer::new;
+        }),tier,segments);
         //LOGGER.debug("Is the ISTER null?" + (this.getItemStackTileEntityRenderer()==null));
     }
 

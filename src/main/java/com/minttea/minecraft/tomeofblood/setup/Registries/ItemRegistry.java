@@ -2,12 +2,14 @@ package com.minttea.minecraft.tomeofblood.setup.Registries;
 
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.spell.ISpellTier;
+import com.hollingsworth.arsnouveau.client.renderer.item.SpellBookRenderer;
 import com.minttea.minecraft.tomeofblood.TomeOfBloodMod;
 import com.minttea.minecraft.tomeofblood.common.items.BloodGem;
 import com.minttea.minecraft.tomeofblood.common.items.BloodScroll;
 import com.minttea.minecraft.tomeofblood.common.items.BloodTome;
 
 
+import com.minttea.minecraft.tomeofblood.common.items.CustomBloodTome;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,6 +24,7 @@ public class ItemRegistry {
     @ObjectHolder("blood_tome_one")public static BloodTome bloodTome1;
     @ObjectHolder("blood_tome_two")public static BloodTome bloodTome2;
     @ObjectHolder("blood_tome_three")public static BloodTome bloodTome3;
+    @ObjectHolder("blood_tome_four")public static BloodTome bloodTome4;
     @ObjectHolder("tome_of_blood")public static Item tome_of_blood;
     @ObjectHolder("blood_gem")public static BloodGem bloodGem;
     @ObjectHolder("blood_scroll")public static BloodScroll bloodScroll;
@@ -35,6 +38,7 @@ public class ItemRegistry {
             registry.register(new BloodTome(ISpellTier.Tier.ONE).setRegistryName("blood_tome_one"));
             registry.register(new BloodTome(ISpellTier.Tier.TWO).setRegistryName("blood_tome_two"));
             registry.register(new BloodTome(ISpellTier.Tier.THREE).setRegistryName("blood_tome_three"));
+            registry.register(new CustomBloodTome("blood_tome_four",4,10));
             registry.register(new BloodGem().setRegistryName("blood_gem"));
             registry.register(new Item(new Item.Properties().maxStackSize(1).group(ArsNouveau.itemGroup)).setRegistryName("tome_of_blood"));
             registry.register(new BloodScroll().setRegistryName("blood_scroll"));

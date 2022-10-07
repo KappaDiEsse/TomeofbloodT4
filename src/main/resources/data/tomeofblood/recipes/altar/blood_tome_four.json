@@ -1,0 +1,13 @@
+{
+  "type": "bloodmagic:altar",
+  "input": {
+    "item": "tomeofblood:blood_tome_three"
+  },
+  "output": {
+    "item": "arsomega:blood_tome_four"
+  },
+  "upgradeLevel": 3,
+  "altarSyphon": 500000,
+  "consumptionRate": 20,
+  "drainRate": 20
+}

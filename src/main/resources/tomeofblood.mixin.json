@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.minttea.minecraft.tomeofblood.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "tomeofblood.refmap.json",
+  "mixins": [
+    "TierFour"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}
